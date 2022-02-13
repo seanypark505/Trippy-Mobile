@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "trippy",
     "name": "Trippy",
     "slug": "Trippy",
     "version": "1.0.0",
