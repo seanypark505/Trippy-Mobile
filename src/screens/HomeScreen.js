@@ -1,40 +1,45 @@
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, SafeAreaView, FlatList, Alert } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import EventCard from '../components/EventCard';
-
-const eventData = [
-  {
-    id: '1',
-    name: 'Camping Trip',
-    date: '6/1/2022',
-  },
-  {
-    id: '2',
-    name: 'The Batman Premiere',
-    date: '4/1/2022',
-  },
-  {
-    id: '3',
-    name: 'Coachella',
-    date: '4/19/2022',
-  },
-  {
-    id: '4',
-    name: 'Royal Blood Concert',
-    date: '5/7/2022',
-  },
-  {
-    id: '5',
-    name: 'Birthday Party',
-    date: '5/4/2022',
-  },
-];
+import eventData from '../data/eventData';
 
 const HomeScreen = () => {
-  const eventCard = ({ item }) => {
-    return <EventCard eventData={item} />;
+  const [events, setEvents] = useState(eventData);
+  console.log(events);
+
+  const loadEvents = () => {
+    setEvents(events);
   };
+
+  const alertDelete = (id) => {
+    Alert.alert(
+      'Deleting Event',
+      'Are you sure you want to delete the event?  The event will be deleted for you and all guests',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          onPress: () => onDelete(id),
+        },
+      ]
+    );
+  };
+
+  const onDelete = (id) => {
+    setEvents(events.filter((eventItem) => eventItem.id !== id));
+  };
+
+  const eventCard = ({ item }) => {
+    return <EventCard eventData={item} alertDelete={alertDelete} />;
+  };
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,9 +49,9 @@ const HomeScreen = () => {
       <FlatList
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
-        data={eventData}
+        data={events}
         renderItem={eventCard}
-        keyExtractor={(eventData) => eventData.id}
+        keyExtractor={(events) => events.id}
       />
     </SafeAreaView>
   );
@@ -57,7 +62,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     alignContent: 'center',
-    backgroundColor: '#CED6CE',
+    backgroundColor: '#E74E35',
     justifyContent: 'space-evenly',
   },
 });

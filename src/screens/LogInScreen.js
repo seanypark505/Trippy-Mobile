@@ -7,24 +7,34 @@ import {
   TextInput,
   TouchableOpacity,
   StatusBar,
+  Alert,
 } from 'react-native';
 
 const LogInScreen = ({ navigation }) => {
   const [emailInput, setEmail] = useState('');
   const [passwordInput, setPassword] = useState('');
 
-  //   const handleSubmit = () => {
-  //     // if (!email) {
-  //     //   alert('Please enter your email');
-  //     //   return;
-  //     // }
-  //     // if (!password) {
-  //     //   alert('Please enter your password');
-  //     //   return;
-  //     // }
-  //     // let creds = { email: emailInput, password: passwordInput };
-  //     navigation.navigate('MainNav');
-  //   };
+  const handleSubmit = () => {
+    if (emailInput == '') {
+      Alert.alert('Invalid Email', 'Please enter a valid email address'),
+        [
+          {
+            text: 'Ok',
+          },
+        ];
+      return;
+    }
+    if (passwordInput == '') {
+      Alert.alert('Invalid Password', 'Please enter a valid password'),
+        [
+          {
+            text: 'Ok',
+          },
+        ];
+      return;
+    }
+    navigation.navigate('MainNav');
+  };
 
   return (
     <View style={styles.container}>
@@ -63,10 +73,7 @@ const LogInScreen = ({ navigation }) => {
         <Text style={styles.forgot_button}>Forgot Password?</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity
-        style={styles.loginBtn}
-        onPress={() => navigation.navigate('MainNav')}
-      >
+      <TouchableOpacity style={styles.loginBtn} onPress={handleSubmit}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
     </View>
