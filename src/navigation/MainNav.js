@@ -39,7 +39,16 @@ const MainNav = () => {
         <Tab.Screen
           name='Profile'
           component={ProfileScreen}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            tabBarIcon: (props) => (
+              <Icon
+                type='font-awesome-5'
+                name='user-circle'
+                color={props.color}
+              />
+            ),
+          }}
         />
       </Tab.Navigator>
     </SafeAreaProvider>

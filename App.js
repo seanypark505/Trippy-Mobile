@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LogInScreen from './src/screens/LogInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import MainNav from './src/navigation/MainNav';
+import EventScreen from './src/screens/EventScreen';
 import { StatusBar } from 'react-native';
 
 // Main Color Palette
@@ -41,6 +42,11 @@ export default function App() {
           <Stack.Screen
             name='MainNav'
             component={MainNav}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Event'
+            component={EventScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

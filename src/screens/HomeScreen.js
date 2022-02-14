@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, FlatList, Alert } from 'react-native';
-import { Text, Button } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import EventCard from '../components/EventCard';
 import eventData from '../data/eventData';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [events, setEvents] = useState(eventData);
-  console.log(events);
 
   const loadEvents = () => {
     setEvents(events);
@@ -33,8 +32,18 @@ const HomeScreen = () => {
     setEvents(events.filter((eventItem) => eventItem.id !== id));
   };
 
+  const viewEvent = (item) => {
+    navigation.push('Event', { item });
+  };
+
   const eventCard = ({ item }) => {
-    return <EventCard eventData={item} alertDelete={alertDelete} />;
+    return (
+      <EventCard
+        eventData={item}
+        alertDelete={alertDelete}
+        viewEvent={viewEvent}
+      />
+    );
   };
 
   useEffect(() => {
@@ -62,7 +71,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     alignContent: 'center',
-    backgroundColor: '#E74E35',
     justifyContent: 'space-evenly',
   },
 });
