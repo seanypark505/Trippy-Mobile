@@ -1,29 +1,57 @@
 import React from 'react';
-import { FlatList, Text, StyleSheet, SafeAreaView } from 'react-native';
+import {
+  FlatList,
+  Text,
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Button,
+} from 'react-native';
 
-const ListScreen = () => {
-  const data = [
-    { id: '1', todoItem: 'Buy Milk' },
-    { id: '2', todoItem: 'Buy Bread' },
-    { id: '3', todoItem: 'Buy Eggs' },
-  ];
+import { CheckBox } from 'react-native-elements';
 
+const ListScreen = ({ route, navigation }) => {
+  console.log(route.params.item.list);
+  const list = route.params.item.list;
   return (
-    <SafeAreaView>
-      <FlatList
-        data={data}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => {
-          return <Text style={styles.textStyle}>{item.todoItem}</Text>;
-        }}
-      />
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.topMenu}>
+        <Button title='Back' onPress={() => navigation.goBack()} />
+      </View>
+      <View style={styles.listContainer}>
+        <FlatList
+          data={list}
+          keyExtractor={(list) => list.itemID}
+          renderItem={({ item }) => {
+            return (
+              <View style={styles.listItem}>
+                <CheckBox center />
+                <Text style={styles.textStyle}>{item.toDo}</Text>
+              </View>
+            );
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  topMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  listContainer: {
+    alignItems: 'center',
+  },
+  listItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   textStyle: {
-    marginVertical: 5,
+    fontSize: 18,
   },
 });
 

@@ -33,7 +33,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const viewEvent = (item) => {
-    navigation.push('Event', { item });
+    navigation.navigate('Event', { item });
   };
 
   const eventCard = ({ item }) => {

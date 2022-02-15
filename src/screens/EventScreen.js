@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Share, View, StyleSheet, SafeAreaView, Button } from 'react-native';
-import { Text, Icon } from 'react-native-elements';
-// import eventData from '../data/eventData';
+import { Text, Icon, Input } from 'react-native-elements';
 
 const EventScreen = ({ route, navigation }) => {
   const item = route.params.item;
@@ -34,16 +33,17 @@ const EventScreen = ({ route, navigation }) => {
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.topMenu}>
         <Button title='Home' onPress={() => navigation.navigate('Home')} />
-        <Button title='Share' onPress={shareLink} />
       </View>
       <View style={styles.container}>
-        <Text h2>{item.name}</Text>
+        <Text style={{ alignSelf: 'center' }} h2>
+          {item.name}
+        </Text>
         <View style={styles.locationContainer}>
           <Icon
             size={20}
             type='font-awesome-5'
             name='map-marker-alt'
-            color='#535353'
+            color='#E74E35'
           />
           <Text style={styles.locationText}>{item.location}</Text>
         </View>
@@ -56,6 +56,41 @@ const EventScreen = ({ route, navigation }) => {
           />
           <Text style={styles.dateText}>{item.date}</Text>
         </View>
+        <View style={styles.btnsContainer}>
+          <View>
+            <Icon
+              type='font-awesome-5'
+              name='edit'
+              solid={true}
+              onPress={() => console.log('This will go to the edit screen')}
+            />
+          </View>
+          <View>
+            <Icon
+              type='font-awesome-5'
+              name='share-square'
+              solid={true}
+              onPress={shareLink}
+            />
+          </View>
+          <View>
+            <Icon
+              type='font-awesome-5'
+              name='list'
+              solid={true}
+              onPress={() => navigation.push('List', { item })}
+            />
+          </View>
+        </View>
+      </View>
+      <View>
+        <Text style={{ marginLeft: 30, fontSize: 20, padding: 10 }}>Posts</Text>
+      </View>
+      <View style={styles.inputBox}>
+        <Input
+          placeholder='Write a message ...'
+          rightIcon={{ type: 'ionicon', name: 'send', color: '#00B4D8' }}
+        />
       </View>
     </SafeAreaView>
   );
@@ -69,11 +104,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   container: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderBottomWidth: 3,
-    borderBottomColor: '#748299',
-    paddingBottom: 25,
     paddingTop: 10,
   },
   dateContainer: {
@@ -82,6 +112,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: 35,
     marginTop: 15,
+    marginBottom: 15,
   },
   locationContainer: {
     flexDirection: 'row',
@@ -97,6 +128,25 @@ const styles = StyleSheet.create({
   locationText: {
     fontSize: 20,
     marginLeft: 15,
+  },
+  btnsContainer: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    alignSelf: 'center',
+    padding: 15,
+    borderTopWidth: 2,
+    borderTopColor: '#D1D1D1',
+    borderBottomWidth: 2,
+    borderBottomColor: '#D1D1D1',
+    width: '85%',
+  },
+  inputBox: {
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 50,
+    width: '95%',
   },
 });
 

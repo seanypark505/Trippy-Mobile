@@ -6,6 +6,7 @@ import LogInScreen from './src/screens/LogInScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import MainNav from './src/navigation/MainNav';
 import EventScreen from './src/screens/EventScreen';
+import ListScreen from './src/screens/ListScreen';
 import { StatusBar } from 'react-native';
 
 // Main Color Palette
@@ -47,6 +48,11 @@ export default function App() {
           <Stack.Screen
             name='Event'
             component={EventScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='List'
+            component={ListScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
