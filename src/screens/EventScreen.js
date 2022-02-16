@@ -57,29 +57,32 @@ const EventScreen = ({ route, navigation }) => {
           <Text style={styles.dateText}>{item.date}</Text>
         </View>
         <View style={styles.btnsContainer}>
-          <View>
+          <View style={styles.btnGroup}>
             <Icon
               type='font-awesome-5'
               name='edit'
               solid={true}
               onPress={() => console.log('This will go to the edit screen')}
             />
+            <Text style={styles.iconLabel}>Edit</Text>
           </View>
-          <View>
+          <View style={styles.btnGroup}>
             <Icon
               type='font-awesome-5'
               name='share-square'
               solid={true}
               onPress={shareLink}
             />
+            <Text style={styles.iconLabel}>Share</Text>
           </View>
-          <View>
+          <View style={styles.btnGroup}>
             <Icon
               type='font-awesome-5'
               name='list'
               solid={true}
               onPress={() => navigation.push('List', { item })}
             />
+            <Text style={styles.iconLabel}>List</Text>
           </View>
         </View>
       </View>
@@ -141,6 +144,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: '#D1D1D1',
     width: '85%',
+  },
+  btnGroup: {
+    alignContent: 'center',
+  },
+  iconLabel: {
+    marginTop: 5,
   },
   inputBox: {
     alignSelf: 'center',
