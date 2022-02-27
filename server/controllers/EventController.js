@@ -1,7 +1,7 @@
-import { Event } from '../models/Event';
+const Event = require('../models/Event');
 
 // Create a new event
-const addEvent = async (hostId, title, location, date) => {
+exports.addEvent = async (hostId, title, location, date) => {
   const eventInfo = {
     host: hostId,
     title: title,
@@ -18,19 +18,19 @@ const addEvent = async (hostId, title, location, date) => {
 };
 
 // Find all events
-const findEvents = async (filter, projection, limit) => {
+exports.findEvents = async (filter, projection, limit) => {
   const query = Event.find(filter).select(projection).limit(limit);
   return query.exec();
 };
 
 // Find event by Id
-const findEventById = async (id) => {
+exports.findEventById = async (id) => {
   const query = Event.findById(id);
   return query.exec();
 };
 
 // Update event by Id
-const updateEventById = async (id, title, location, date) => {
+exports.updateEventById = async (id, title, location, date) => {
   const result = await Event.updateOne(
     { _id: id },
     {
@@ -48,15 +48,7 @@ const updateEventById = async (id, title, location, date) => {
   }
 };
 
-const deleteEventById = async (id) => {
+exports.deleteEventById = async (id) => {
   const result = await Event.deleteOne({ _id: id });
   return result.deletedCount;
-};
-
-export {
-  addEvent,
-  findEvents,
-  findEventById,
-  updateEventById,
-  deleteEventById,
 };

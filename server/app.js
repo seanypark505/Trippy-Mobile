@@ -30,7 +30,12 @@ db.once('open', function () {
   console.log('Connected to trippyDB');
 });
 
-app.use('/', eventRoute());
+// Load in routes
+const users = require('./routes/users');
+const events = require('./routes/events');
+
+app.use('/users', users);
+app.use('/events', events);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

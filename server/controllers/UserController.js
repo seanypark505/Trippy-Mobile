@@ -1,9 +1,7 @@
-import mongoose from 'mongoose';
+const User = require('../models/User');
 
-
-
-
-const addUser = async (email, password, fName, lName) => {
+// Create a new user
+exports.addUser = async (email, password, fName, lName) => {
   const user = new User({
     email: email,
     password: password,
@@ -11,4 +9,36 @@ const addUser = async (email, password, fName, lName) => {
     lName: lName,
   });
   return user.save();
+};
+
+// Find user
+exports.findUserById = async (id) => {
+  const query = User.findById(id);
+  return query.exec();
+};
+
+// Update user
+exports.updateUserById = async (id, email, password, fName, lName) => {
+  const result = await User.updateOne(
+    { _id: id },
+    {
+      email: email,
+      password: password,
+      fName: fName,
+      lName: lName,
+    },
+    { omitUndefined: true }
+  );
+
+  if (result.n === 0) {
+    throw 'User does not exist';
+  } else {
+    return result.nModified;
+  }
+};
+
+// Delete user
+exports.deleteUserById = async (id) => {
+  const result = await User.deleteOne({ _id: id });
+  return result.deletedCount;
 };
