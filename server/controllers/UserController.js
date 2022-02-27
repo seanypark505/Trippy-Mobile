@@ -13,7 +13,7 @@ exports.addUser = async (email, password, fName, lName) => {
 
 // Find user
 exports.findUserById = async (id) => {
-  const query = User.findById(id);
+  const query = User.findById(id).populate('events')
   return query.exec();
 };
 

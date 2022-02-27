@@ -1,20 +1,41 @@
 const Event = require('../models/Event');
+const List = require('../models/List');
 
 // Create a new event
 exports.addEvent = async (hostId, title, location, date) => {
+  const listItems = {
+    listItems: [
+      { todo: 'This is a To Do List', done: false },
+      { todo: 'You can mark items complete', done: true },
+      { todo: 'Click on the plug sign to add more items', done: false },
+      { todo: 'Click on the - (minus) icon to delete', boolean: false },
+    ],
+  };
+
+  const eventList = await List.create(listItems);
+
   const eventInfo = {
     host: hostId,
     title: title,
     location: location,
     date: date,
-    toDo: [],
-    posts: [],
+    list: eventList,
   };
 
   // Create new event
-  const newEvent = Event.create(eventInfo);
-
-  return newEvent;
+  let newEvent = await Event.create(eventInfo, function (err, event) {
+    if (err) {
+      console.error(err);
+    } else {
+      const eventId = event._id;
+      const newUrl = `http://localhost:3000/events/share/${eventId}`;
+      const update = { url: newUrl };
+      newEvent = await Event.findOneAndUpdate({ _id: eventId }, update, {
+        new: true,
+      });
+      return newEvent;
+    }
+  });
 };
 
 // Find all events
@@ -25,7 +46,10 @@ exports.findEvents = async (filter, projection, limit) => {
 
 // Find event by Id
 exports.findEventById = async (id) => {
-  const query = Event.findById(id);
+  const query = Event.findById(id)
+    .populate('host')
+    .populate('list')
+    .populate('posts');
   return query.exec();
 };
 

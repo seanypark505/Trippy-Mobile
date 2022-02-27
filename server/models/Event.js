@@ -5,8 +5,9 @@ const eventSchema = new Schema({
   title: { type: String, required: true },
   location: { type: String, required: true },
   date: { type: Date, required: true },
-  toDo: [{ type: Schema.Types.ObjectId, ref: 'List' }],
-  posts: [{ type: Schema.Types.ObjectId, ref: 'Post' }],
+  list: { type: Schema.Types.ObjectId, ref: 'List' },
+  posts: [{ user: String, content: String}],
+  url: String,
 });
 
 const Event = mongoose.model('Event', eventSchema);
