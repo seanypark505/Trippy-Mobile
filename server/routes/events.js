@@ -35,13 +35,13 @@ router.get('/events/:id', (req, res) => {
     });
 });
 
-router.get('/events/share/:id', (req, res) => {
-  // Logic for retrieving event by id from share link
-  const event = events.findEventById(id);
-  const { id } = req.params;
+// router.get('/events/share/:id', (req, res) => {
+//   // Logic for retrieving event by id from share link
+//   // const event = events.findEventById(id);
+//   const { id } = req.params;
 
-  res.render('index.ejs', { event });
-});
+//   res.render('index.ejs', { id });
+// });
 
 router.put('/events/:id', (req, res) => {
   // Logic for updating an event

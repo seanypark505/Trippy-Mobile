@@ -5,27 +5,41 @@ import { Text, Icon, Input } from 'react-native-elements';
 const EventScreen = ({ route, navigation }) => {
   const item = route.params.item;
 
-  const shareLink = async () => {
-    const eventID = 'RANDOMID123';
-    const url = `https://invites.trippy.com/join/${eventID}`;
-    const message = `Hey!  I'm inviting you to an event on Trippy.  Please RSVP!  ${url}`;
-    console.log(message);
+  const shareLink = async (id) => {
+    const source = {
+      url: `http://localhost:3000/events/share/${id}`,
+    };
 
+    const body = JSON.stringify(source);
     try {
-      const result = await Share.share({
-        message: message,
+      const response = await fetch('http://192.168.1.101:8080/urlShortener', {
+        method: 'POST',
+        body: body,
       });
-      if (result.action === Share.sharedAction) {
-        if (result.activityType) {
-          // shared with activity type of result.activityType
-        } else {
-          // shared
+
+      const json = await response.json();
+      const shareUrl = json.data.tiny_url;
+
+      const message = `Hey!  I'm inviting you to an event on Trippy.  Please RSVP!  ${shareUrl}`;
+
+      try {
+        const result = await Share.share({
+          message: message,
+        });
+        if (result.action === Share.sharedAction) {
+          if (result.activityType) {
+            // shared with activity type of result.activityType
+          } else {
+            // shared
+          }
+        } else if (result.action === Share.dismissedAction) {
+          // dismissed
         }
-      } else if (result.action === Share.dismissedAction) {
-        // dismissed
+      } catch (error) {
+        alert(error.message);
       }
     } catch (error) {
-      alert(error.message);
+      console.error(error);
     }
   };
 
@@ -71,7 +85,7 @@ const EventScreen = ({ route, navigation }) => {
               type='font-awesome-5'
               name='share-square'
               solid={true}
-              onPress={shareLink}
+              onPress={() => shareLink(item.id)}
             />
             <Text style={styles.iconLabel}>Share</Text>
           </View>
