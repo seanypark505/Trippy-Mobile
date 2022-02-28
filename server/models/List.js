@@ -1,7 +1,8 @@
-import mongoose, { Schema } from 'mongoose';
+const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
 const listSchema = new Schema({
-  listItems: [{ todo: String, done: boolean }],
+  listItems: [{ todo: String, done: Boolean }],
 });
 
 const List = mongoose.model('List', listSchema);

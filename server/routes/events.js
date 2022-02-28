@@ -18,10 +18,10 @@ router.post('/events', (req, res) => {
 
 router.get('/events/:id', (req, res) => {
   // Logic for retrieving event by id
-  const { _id } = req.params;
+  const { id } = req.params;
 
   events
-    .findEventById(_id)
+    .findEventById(id)
     .then((event) => {
       if (event !== null) {
         res.status(200).json(event);
@@ -37,21 +37,23 @@ router.get('/events/:id', (req, res) => {
 
 router.get('/events/share/:id', (req, res) => {
   // Logic for retrieving event by id from share link
-  const { _id } = req.params;
+  const event = events.findEventById(id);
+  const { id } = req.params;
 
-  
-})
+  res.render('index.ejs', { event });
+});
 
 router.put('/events/:id', (req, res) => {
   // Logic for updating an event
-  const { _id, title, location, date } = req.params;
+  const { id } = req.params;
+  const { title, location, date } = req.body;
 
   events
-    .updateEventById(_id, title, location, date)
+    .updateEventById(id, title, location, date)
     .then((numUpdated) => {
       if (numUpdated === 1) {
         res.status(200).json({
-          _id: _id,
+          _id: id,
           title: title,
           location: location,
           date: date,
@@ -68,10 +70,10 @@ router.put('/events/:id', (req, res) => {
 
 router.delete('/events/:id', (req, res) => {
   // Logic for deleting an event
-  const { _id } = req.params;
+  const { id } = req.params;
 
   events
-    .deleteEventById(_id)
+    .deleteEventById(id)
     .then((deletedCount) => {
       if (deletedCount === 1) {
         res.status(204).send();

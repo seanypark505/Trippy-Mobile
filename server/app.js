@@ -10,7 +10,6 @@ const corsOptions = { origin: 'http://localhost:3000' };
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-    useFindAndModify: false,
     useUnifiedTopology: true,
   })
   .catch((error) => console.error(error));
@@ -30,13 +29,16 @@ app.use(
   })
 );
 app.use(express.json());
+app.use(express.static('public'));
 
 // Routes
 const users = require('./routes/users');
 const events = require('./routes/events');
+const lists = require('./routes/lists');
 
 app.use('/users', users);
 app.use('/events', events);
+app.use('/lists', lists);
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

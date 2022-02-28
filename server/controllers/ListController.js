@@ -1,44 +1,33 @@
 const List = require('../models/List');
 
-// Create a list item
-exports.addToList = async (listId, listItem) => {
-    const user = new User({
-      email: email,
-      password: password,
-      fName: fName,
-      lName: lName,
-    });
-    return user.save();
-  };
-  
-  // Find user
-  exports.findUserById = async (id) => {
-    const query = User.findById(id).populate('events')
-    return query.exec();
-  };
-  
-  // Update user
-  exports.updateUserById = async (id, email, password, fName, lName) => {
-    const result = await User.updateOne(
-      { _id: id },
-      {
-        email: email,
-        password: password,
-        fName: fName,
-        lName: lName,
-      },
-      { omitUndefined: true }
-    );
-  
-    if (result.n === 0) {
-      throw 'User does not exist';
-    } else {
-      return result.nModified;
-    }
-  };
-  
-  // Delete user
-  exports.deleteUserById = async (id) => {
-    const result = await User.deleteOne({ _id: id });
-    return result.deletedCount;
-  };
+// Find List
+exports.findListById = async (id) => {
+  const query = List.findById(id).populate('listItems');
+  return query.exec();
+};
+
+// Add list item
+exports.addListItemById = async (id, listItem) => {
+  const query = List.findById(id);
+  query.listItems.push(listItem);
+  const updatedlist = await query.save();
+  return updatedList;
+};
+
+// Update list item
+exports.updatedListItemById = async (id, itemId, update, done) => {
+  const query = List.findById(id);
+  const listItem = query.listItems.id(itemId);
+  listItem.todo = update;
+  listItem.done = done;
+  const updatedList = await query.save();
+  return updatedList
+}
+
+// Delete list item
+exports.deleteListItemById = async (id, listItemId) => {
+  const query = await List.findById(id);
+  query.listItems.id(listItemId).remove();
+  const updatedList = await query.save();
+  return updatedList;
+};

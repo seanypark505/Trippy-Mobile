@@ -30,23 +30,23 @@ exports.addEvent = async (hostId, title, location, date) => {
       const eventId = event._id;
       const newUrl = `http://localhost:3000/events/share/${eventId}`;
       const update = { url: newUrl };
-      newEvent = await Event.findOneAndUpdate({ _id: eventId }, update, {
+      newEvent = Event.findOneAndUpdate({ _id: eventId }, update, {
         new: true,
       });
-      return newEvent;
+      return newEvent.exec();
     }
   });
 };
 
 // Find all events
-exports.findEvents = async (filter, projection, limit) => {
-  const query = Event.find(filter).select(projection).limit(limit);
-  return query.exec();
-};
+// exports.findEvents = async (filter, projection, limit) => {
+//   const query = await Event.find(filter).select(projection).limit(limit);
+//   return query.exec();
+// };
 
 // Find event by Id
 exports.findEventById = async (id) => {
-  const query = Event.findById(id)
+  const query = await Event.findById(id)
     .populate('host')
     .populate('list')
     .populate('posts');
