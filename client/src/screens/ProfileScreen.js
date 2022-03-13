@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, SafeAreaView } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Button } from 'react-native';
 import { Text, Avatar } from 'react-native-elements';
 
 const user = {
@@ -8,7 +8,12 @@ const user = {
   photo: '../../assets/prof_pic.jpeg',
 };
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
+  const logOut = () => {
+    console.log('Log out user');
+    navigation.navigate('Auth');
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -21,6 +26,7 @@ const ProfileScreen = () => {
         <Text style={{ marginTop: 20 }} h1>
           {user.fName} {user.lName}
         </Text>
+        <Button onPress={logOut}>Log Out</Button>
       </View>
     </SafeAreaView>
   );

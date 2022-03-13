@@ -2,7 +2,7 @@ const lists = require('../controllers/ListController');
 const express = require('express');
 const router = express.Router();
 
-router.post('/lists/:id', (req, res) => {
+router.post('/:id', (req, res) => {
   // Logic for creating new list item
   const { id } = req.params;
   const { newItem } = req.body;
@@ -18,7 +18,7 @@ router.post('/lists/:id', (req, res) => {
     });
 });
 
-router.get('/lists/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   // Logic for retrieving user
   const { id } = req.params;
 
@@ -37,7 +37,7 @@ router.get('/lists/:id', (req, res) => {
     });
 });
 
-router.put('/lists/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   // Logic for updating list items
   const { id } = req.params;
   const { listItem } = req.body;
@@ -60,7 +60,7 @@ router.put('/lists/:id', (req, res) => {
     });
 });
 
-router.delete('/lists/:listId/item/:itemId', (req, res) => {
+router.delete('/:listId/item/:itemId', (req, res) => {
   // Logic for deleting user
   const { listId, itemId } = req.params;
 

@@ -40,14 +40,6 @@ app.use('/users', users);
 app.use('/events', events);
 app.use('/lists', lists);
 
-app.get('/events/share/:id', (req, res) => {
-  // Logic for retrieving event by id from share link
-  // const event = events.findEventById(id);
-  const { id } = req.params;
-
-  res.render('index.ejs', { id });
-});
-
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });

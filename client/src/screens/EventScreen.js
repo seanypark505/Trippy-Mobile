@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Share, View, StyleSheet, SafeAreaView, Button } from 'react-native';
 import { Text, Icon, Input } from 'react-native-elements';
+import { HOST_8080 } from '../../environment';
 
 const EventScreen = ({ route, navigation }) => {
   const item = route.params.item;
@@ -12,7 +13,7 @@ const EventScreen = ({ route, navigation }) => {
 
     const body = JSON.stringify(source);
     try {
-      const response = await fetch('http://192.168.1.101:8080/urlShortener', {
+      const response = await fetch(`${HOST_8080}/urlShortener`, {
         method: 'POST',
         body: body,
       });

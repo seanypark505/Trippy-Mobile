@@ -2,7 +2,7 @@ const events = require('../controllers/EventController');
 const express = require('express');
 const router = express.Router();
 
-router.post('/events', (req, res) => {
+router.post('/', (req, res) => {
   // Logic for creating a new event
   const { hostId, title, location, date } = req.body;
   events
@@ -16,7 +16,7 @@ router.post('/events', (req, res) => {
     });
 });
 
-router.get('/events/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   // Logic for retrieving event by id
   const { id } = req.params;
 
@@ -35,15 +35,15 @@ router.get('/events/:id', (req, res) => {
     });
 });
 
-// router.get('/events/share/:id', (req, res) => {
-//   // Logic for retrieving event by id from share link
-//   // const event = events.findEventById(id);
-//   const { id } = req.params;
+router.get('/share/:id', (req, res) => {
+  // Logic for retrieving event by id from share link
+  // const event = events.findEventById(id);
+  const { id } = req.params;
 
-//   res.render('index.ejs', { id });
-// });
+  res.render('index.ejs', { id });
+});
 
-router.put('/events/:id', (req, res) => {
+router.put('/:id', (req, res) => {
   // Logic for updating an event
   const { id } = req.params;
   const { title, location, date } = req.body;
@@ -68,7 +68,7 @@ router.put('/events/:id', (req, res) => {
     });
 });
 
-router.delete('/events/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
   // Logic for deleting an event
   const { id } = req.params;
 
