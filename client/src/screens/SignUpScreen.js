@@ -11,11 +11,13 @@ import {
 } from 'react-native';
 
 const SignUpScreen = ({ navigation }) => {
-  const [emailInput, setEmail] = useState('');
-  const [passwordInput, setPassword] = useState('');
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = () => {
-    if (emailInput == '') {
+  const handleSubmit = async () => {
+    if (email == '') {
       Alert.alert('Invalid Email', 'Please enter a valid email address'),
         [
           {
@@ -24,7 +26,7 @@ const SignUpScreen = ({ navigation }) => {
         ];
       return;
     }
-    if (passwordInput == '') {
+    if (password == '') {
       Alert.alert('Invalid Password', 'Please enter a valid password'),
         [
           {
@@ -33,6 +35,28 @@ const SignUpScreen = ({ navigation }) => {
         ];
       return;
     }
+
+    const newUser = {
+      fName,
+      lName,
+      email,
+      password,
+    };
+
+    const res = await fetch('/users', {
+      method: 'POST',
+      body: JSON.stringify(newUser),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 201) {
+      console.log('User successfully created');
+    } else {
+      console.log(`Status Code ${res.status} - Failed to create user`);
+    }
+
     navigation.navigate('MainNav');
   };
 
@@ -53,9 +77,27 @@ const SignUpScreen = ({ navigation }) => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
+          placeholder='First Name'
+          placeholderTextColor='#003f5c'
+          onChangeText={(fName) => setFName(fName)}
+        />
+      </View>
+
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
+          placeholder='Last Name'
+          placeholderTextColor='#003f5c'
+          onChangeText={(lName) => setLName(lName)}
+        />
+      </View>
+
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.TextInput}
           placeholder='Email'
           placeholderTextColor='#003f5c'
-          onChangeText={(emailInput) => setEmail(emailInput)}
+          onChangeText={(email) => setEmail(email)}
         />
       </View>
 
@@ -65,7 +107,7 @@ const SignUpScreen = ({ navigation }) => {
           placeholder='Password'
           placeholderTextColor='#003f5c'
           secureTextEntry={true}
-          onChangeText={(passwordInput) => setPassword(passwordInput)}
+          onChangeText={(password) => setPassword(password)}
         />
       </View>
 

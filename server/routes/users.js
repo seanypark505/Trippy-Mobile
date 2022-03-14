@@ -2,7 +2,7 @@ const users = require('../controllers/UserController');
 const express = require('express');
 const router = express.Router();
 
-router.post('/', (req, res) => {
+router.post('/signup', (req, res) => {
   // Logic for creating new user
   const { email, password, fName, lName } = req.body;
 
@@ -15,6 +15,10 @@ router.post('/', (req, res) => {
       console.error(error);
       res.status(500).json({ Error: 'Request Failed' });
     });
+});
+
+router.post('/auth', (req, res) => {
+  // Logic for authenticating user
 });
 
 router.get('/:id', (req, res) => {
@@ -36,7 +40,7 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/update/:id', (req, res) => {
   // Logic for updating user
   const { id } = req.params;
   const { email, password, fName, lName, events } = req.body;
@@ -58,7 +62,7 @@ router.put('/:id', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/delete/:id', (req, res) => {
   // Logic for deleting user
   const { id } = req.params;
 

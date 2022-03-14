@@ -11,11 +11,11 @@ import {
 } from 'react-native';
 
 const LogInScreen = ({ navigation }) => {
-  const [emailInput, setEmail] = useState('');
-  const [passwordInput, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = () => {
-    if (emailInput == '') {
+  const handleSubmit = async () => {
+    if (email == '') {
       Alert.alert('Invalid Email', 'Please enter a valid email address'),
         [
           {
@@ -24,7 +24,7 @@ const LogInScreen = ({ navigation }) => {
         ];
       return;
     }
-    if (passwordInput == '') {
+    if (password == '') {
       Alert.alert('Invalid Password', 'Please enter a valid password'),
         [
           {
@@ -33,6 +33,23 @@ const LogInScreen = ({ navigation }) => {
         ];
       return;
     }
+
+    const userCred = { email, password };
+
+    const res = await fetch('/users', {
+      method: 'POST',
+      body: JSON.stringify(userCred),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 201) {
+      console.log('User successfully created');
+    } else {
+      console.log(`Status Code ${res.status} - Failed to create user`);
+    }
+
     navigation.navigate('MainNav');
   };
 
@@ -55,7 +72,7 @@ const LogInScreen = ({ navigation }) => {
           style={styles.TextInput}
           placeholder='Email'
           placeholderTextColor='#003f5c'
-          onChangeText={(emailInput) => setEmail(emailInput)}
+          onChangeText={(email) => setEmail(email)}
         />
       </View>
 
@@ -65,7 +82,7 @@ const LogInScreen = ({ navigation }) => {
           placeholder='Password'
           placeholderTextColor='#003f5c'
           secureTextEntry={true}
-          onChangeText={(passwordInput) => setPassword(passwordInput)}
+          onChangeText={(password) => setPassword(password)}
         />
       </View>
 
