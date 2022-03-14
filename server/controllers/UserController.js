@@ -1,9 +1,9 @@
 const User = require('../models/User');
 
 // Create a new user
-exports.addUser = async (email, password, fName, lName) => {
+exports.addUser = async (username, password, fName, lName) => {
   const user = new User({
-    email: email,
+    username: username,
     password: password,
     fName: fName,
     lName: lName,
@@ -18,11 +18,11 @@ exports.findUserById = async (id) => {
 };
 
 // Update user
-exports.updateUserById = async (id, email, password, fName, lName) => {
+exports.updateUserById = async (id, username, password, fName, lName) => {
   const result = await User.updateOne(
     { _id: id },
     {
-      email: email,
+      username: username,
       password: password,
       fName: fName,
       lName: lName,

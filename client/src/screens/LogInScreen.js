@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 
 const LogInScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
-    if (email == '') {
-      Alert.alert('Invalid Email', 'Please enter a valid email address'),
+    if (username == '') {
+      Alert.alert('Invalid username', 'Please enter a valid username address'),
         [
           {
             text: 'Ok',
@@ -34,7 +34,7 @@ const LogInScreen = ({ navigation }) => {
       return;
     }
 
-    const userCred = { email, password };
+    const userCred = { username, password };
 
     const res = await fetch('/users', {
       method: 'POST',
@@ -70,9 +70,9 @@ const LogInScreen = ({ navigation }) => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.TextInput}
-          placeholder='Email'
+          placeholder='username'
           placeholderTextColor='#003f5c'
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(username) => setUsername(username)}
         />
       </View>
 

@@ -4,10 +4,10 @@ const router = express.Router();
 
 router.post('/signup', (req, res) => {
   // Logic for creating new user
-  const { email, password, fName, lName } = req.body;
+  const { username, password, fName, lName } = req.body;
 
   users
-    .addUser(email, password, fName, lName)
+    .addUser(username, password, fName, lName)
     .then((user) => {
       res.status(201).json(user);
     })
@@ -43,10 +43,10 @@ router.get('/:id', (req, res) => {
 router.put('/update/:id', (req, res) => {
   // Logic for updating user
   const { id } = req.params;
-  const { email, password, fName, lName, events } = req.body;
+  const { username, password, fName, lName, events } = req.body;
 
   events
-    .updateUserById(id, email, password, fName, lName, events)
+    .updateUserById(id, username, password, fName, lName, events)
     .then((numUpdated) => {
       if (numUpdated === 1) {
         res.status(200).json({

@@ -13,11 +13,11 @@ import {
 const SignUpScreen = ({ navigation }) => {
   const [fName, setFName] = useState('');
   const [lName, setLName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
-    if (email == '') {
+    if (username == '') {
       Alert.alert('Invalid Email', 'Please enter a valid email address'),
         [
           {
@@ -39,7 +39,7 @@ const SignUpScreen = ({ navigation }) => {
     const newUser = {
       fName,
       lName,
-      email,
+      username,
       password,
     };
 
@@ -97,7 +97,7 @@ const SignUpScreen = ({ navigation }) => {
           style={styles.TextInput}
           placeholder='Email'
           placeholderTextColor='#003f5c'
-          onChangeText={(email) => setEmail(email)}
+          onChangeText={(username) => setUsername(username)}
         />
       </View>
 

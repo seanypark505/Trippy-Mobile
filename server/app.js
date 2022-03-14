@@ -2,11 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const User = require('./models/user');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 const corsOptions = { origin: 'http://localhost:3000' };
-const passport = require('passport');
-const User = require('./models/user');
 
 // Database
 mongoose
