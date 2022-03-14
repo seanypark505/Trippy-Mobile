@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const passport = require('passport');
+// const passport = require('passport');
 const User = require('./models/user');
 
 const app = express();
@@ -35,20 +35,20 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Set up session
-app.use(
-  require('express-session')({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-  })
-);
+// app.use(
+//   require('express-session')({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true,
+//   })
+// );
 
 // Passport config
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// app.use(passport.initialize());
+// app.use(passport.session());
+// passport.use(User.createStrategy());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 // Routes
 const users = require('./routes/users');

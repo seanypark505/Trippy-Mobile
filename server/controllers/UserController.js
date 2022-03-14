@@ -8,12 +8,13 @@ exports.addUser = async (username, password, fName, lName) => {
     fName: fName,
     lName: lName,
   });
+
   return user.save();
 };
 
 // Find user
 exports.findUserById = async (id) => {
-  const query = User.findById(id).populate('events')
+  const query = User.findById(id).populate('events');
   return query.exec();
 };
 

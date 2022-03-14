@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/signup', (req, res) => {
   // Logic for creating new user
   const { username, password, fName, lName } = req.body;
-
+  
   users
     .addUser(username, password, fName, lName)
     .then((user) => {
