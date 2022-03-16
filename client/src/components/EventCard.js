@@ -8,7 +8,7 @@ const EventCard = ({ eventData, alertDelete, viewEvent }) => {
       <Card>
         <Card.Title>
           <Pressable onPress={() => viewEvent(eventData)}>
-            <Text h3>{eventData.name}</Text>
+            <Text h3>{eventData.title}</Text>
           </Pressable>
         </Card.Title>
         <Card.Divider />
@@ -24,7 +24,7 @@ const EventCard = ({ eventData, alertDelete, viewEvent }) => {
           </View>
           <View style={styles.iconsContainer}>
             <Icon
-              onPress={() => alertDelete(eventData.id)}
+              onPress={() => alertDelete(eventData._id)}
               type='font-awesome-5'
               name='trash-alt'
               color='#f50'

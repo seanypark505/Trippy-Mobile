@@ -3,12 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon } from 'react-native-elements';
 import HomeScreen from '../screens/HomeScreen';
 import CreateEventScreen from '../screens/CreateEventScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator();
 
-const MainNav = () => {
+const MainNav = ({ route, navigation }) => {
   return (
     <SafeAreaProvider>
       <Tab.Navigator>
@@ -31,20 +30,6 @@ const MainNav = () => {
               <Icon
                 type='font-awesome-5'
                 name='plus-circle'
-                color={props.color}
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name='Profile'
-          component={ProfileScreen}
-          options={{
-            headerShown: false,
-            tabBarIcon: (props) => (
-              <Icon
-                type='font-awesome-5'
-                name='user-circle'
                 color={props.color}
               />
             ),

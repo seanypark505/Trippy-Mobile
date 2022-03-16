@@ -2,54 +2,41 @@ const Event = require('../models/Event');
 const List = require('../models/List');
 
 // Create a new event
-exports.addEvent = async (hostId, title, location, date) => {
-  const listItems = {
-    listItems: [
-      { todo: 'This is a To Do List', done: false },
-      { todo: 'You can mark items complete', done: true },
-      { todo: 'Click on the plug sign to add more items', done: false },
-      { todo: 'Click on the - (minus) icon to delete', boolean: false },
-    ],
-  };
-
-  const eventList = await List.create(listItems);
-
+exports.addEvent = async (title, location, date) => {
   const eventInfo = {
-    host: hostId,
     title: title,
     location: location,
     date: date,
-    list: eventList,
   };
 
+  const defaultList = [
+    { item: 'This is a To Do List', done: false },
+    { item: 'You can mark items complete', done: true },
+    { item: 'Click on the plug sign to add more items', done: false },
+    { item: 'Click on the - (minus) icon to delete', done: false },
+  ];
+
+  const newList = await List.create(defaultList);
+
   // Create new event
-  let newEvent = await Event.create(eventInfo, function (err, event) {
-    if (err) {
-      console.error(err);
-    } else {
-      const eventId = event._id;
-      const newUrl = `http://localhost:3000/events/share/${eventId}`;
-      const update = { url: newUrl };
-      newEvent = Event.findOneAndUpdate({ _id: eventId }, update, {
-        new: true,
-      });
-      return newEvent.exec();
-    }
-  });
+  const newEvent = await Event.create(eventInfo);
+
+  const eventId = newEvent._id;
+  const newUrl = `http://localhost:3000/events/share/${eventId}`;
+  newEvent.url = newUrl;
+  newList.forEach((item) => newEvent.list.push(item._id));
+  return newEvent.save();
 };
 
 // Find all events
-// exports.findEvents = async (filter, projection, limit) => {
-//   const query = await Event.find(filter).select(projection).limit(limit);
-//   return query.exec();
-// };
+exports.findEvents = async (filter, projection, limit) => {
+  const query = Event.find(filter).select(projection).limit(limit);
+  return query.exec();
+};
 
 // Find event by Id
 exports.findEventById = async (id) => {
-  const query = await Event.findById(id)
-    .populate('host')
-    .populate('list')
-    .populate('posts');
+  const query = await Event.findById(id).populate('list').populate('posts');
   return query.exec();
 };
 

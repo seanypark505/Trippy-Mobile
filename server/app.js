@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 // const passport = require('passport');
-const User = require('./models/user');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -51,11 +50,9 @@ app.use(express.static('public'));
 // passport.deserializeUser(User.deserializeUser());
 
 // Routes
-const users = require('./routes/users');
 const events = require('./routes/events');
 const lists = require('./routes/lists');
 
-app.use('/users', users);
 app.use('/events', events);
 app.use('/lists', lists);
 

@@ -5,6 +5,7 @@ import { HOST_8080 } from '../../environment';
 
 const EventScreen = ({ route, navigation }) => {
   const item = route.params.item;
+  
 
   const shareLink = async (id) => {
     const source = {

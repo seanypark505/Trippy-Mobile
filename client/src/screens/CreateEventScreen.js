@@ -8,9 +8,10 @@ import {
 } from 'react-native';
 import { Text, Input, Button } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { HOST_3000 } from '../../environment';
 
-const CreateEventScreen = () => {
-  const [eventName, setEventName] = useState('');
+const CreateEventScreen = ({ route, navigation }) => {
+  const [title, setTitle] = useState('');
   const [location, setLocation] = useState('');
   const [date, setDate] = useState(new Date());
   const [isPickerShow, setIsPickerShow] = useState(false);
@@ -26,9 +27,28 @@ const CreateEventScreen = () => {
     isPickerShow ? setIsPickerShow(false) : setIsPickerShow(true);
   };
 
-  const handleSubmit = () => {
-    console.log(eventName);
-    console.log(date.toLocaleDateString('en-US'));
+  const handleSubmit = async () => {
+    const eventData = {
+      title: title,
+      location: location,
+      date: date.toLocaleDateString('en-US'),
+    };
+
+    const res = await fetch(`${HOST_3000}/events`, {
+      method: 'POST',
+      body: JSON.stringify(eventData),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 201) {
+      console.log('Event created');
+      const event = await res.json();
+      navigation.navigate('Home', { post: event });
+    } else {
+      console.log(`Status Code ${res.status} - Failed to create event`);
+    }
   };
 
   return (
@@ -40,7 +60,7 @@ const CreateEventScreen = () => {
         <Input
           containerStyle={{ width: '80%' }}
           placeholder='Event Name'
-          onChangeText={(eventName) => setEventName(eventName)}
+          onChangeText={(title) => setTitle(title)}
         />
         <Input
           containerStyle={{ width: '80%' }}

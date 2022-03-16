@@ -2,11 +2,23 @@ const events = require('../controllers/EventController');
 const express = require('express');
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  events
+    .findEvents({}, '', 0)
+    .then((events) => {
+      res.status(201).json(events);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ Error: 'Request Failed' });
+    });
+});
+
 router.post('/', (req, res) => {
   // Logic for creating a new event
-  const { hostId, title, location, date } = req.body;
+  const { title, location, date } = req.body;
   events
-    .addEvent(hostId, title, location, date)
+    .addEvent(title, location, date)
     .then((event) => {
       res.status(201).json(event);
     })
