@@ -5,10 +5,10 @@ const router = express.Router();
 router.post('/:id', (req, res) => {
   // Logic for creating new list item
   const { id } = req.params;
-  const { newItem } = req.body;
+  const newItem = req.body;
 
   lists
-    .addListItemById(id, newItem)
+    .addListItem(id, newItem)
     .then((list) => {
       res.status(201).json(list);
     })
@@ -37,46 +37,35 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.put('/:id', (req, res) => {
+router.put('/update/:id', (req, res) => {
   // Logic for updating list items
   const { id } = req.params;
-  const { listItem } = req.body;
-  const itemId = listItem._id;
-  const update = listItem.todo;
-  const done = listItem.done;
+  const update = req.body;
 
-  lists
-    .updateListItemById(id, itemId, update, done)
-    .then((list) => {
-      if (list !== null) {
-        res.status(200).json(list);
-      } else {
-        res.status(500).json({ Error: 'Resource Not Found' });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({ Error: 'Request Failed' });
-    });
+  lists.updateListItem(id, update).then((numUpdated) => {
+    if (numUpdated === 1) {
+      res.status(200).json({
+        _id: req.params.id,
+        item: req.body.item,
+        done: req.body.done,
+      });
+    } else {
+      res.status(500).json({ Error: 'Resource Not Found' });
+    }
+  });
 });
 
-router.delete('/:listId/item/:itemId', (req, res) => {
+router.delete('/:itemId', (req, res) => {
   // Logic for deleting user
-  const { listId, itemId } = req.params;
+  const { itemId } = req.params;
 
-  events
-    .deleteUserById(listId, itemId)
-    .then((list) => {
-      if (list !== null) {
-        res.status(200).json(list);
-      } else {
-        res.status(500).json({ Error: 'Resource Not Found' });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({ Error: 'Request Failed' });
-    });
+  lists.deleteItemById(itemId).then((deletedCount) => {
+    if (deletedCount === 1) {
+      res.status(204).send();
+    } else {
+      res.status(500).json({ Error: 'Resource Not Found' });
+    }
+  });
 });
 
 module.exports = router;

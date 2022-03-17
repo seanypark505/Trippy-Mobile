@@ -9,21 +9,30 @@ exports.addEvent = async (title, location, date) => {
     date: date,
   };
 
-  const defaultList = [
-    { item: 'This is a To Do List', done: false },
-    { item: 'You can mark items complete', done: true },
-    { item: 'Click on the plug sign to add more items', done: false },
-    { item: 'Click on the - (minus) icon to delete', done: false },
-  ];
-
-  const newList = await List.create(defaultList);
-
   // Create new event
   const newEvent = await Event.create(eventInfo);
 
   const eventId = newEvent._id;
   const newUrl = `http://localhost:3000/events/share/${eventId}`;
   newEvent.url = newUrl;
+
+  const defaultList = [
+    { item: 'This is a To Do List', done: false, event: eventId },
+    { item: 'You can mark items complete', done: true, event: eventId },
+    {
+      item: 'Use the input at the bottom to add another item',
+      done: false,
+      event: eventId,
+    },
+    {
+      item: 'Click on the - (minus) icon on the right to delete',
+      done: false,
+      event: eventId,
+    },
+  ];
+
+  const newList = await List.create(defaultList);
+
   newList.forEach((item) => newEvent.list.push(item._id));
   return newEvent.save();
 };
@@ -60,6 +69,11 @@ exports.updateEventById = async (id, title, location, date) => {
 };
 
 exports.deleteEventById = async (id) => {
+  const event = await Event.findOne({ _id: id });
+  const listIDs = event.list;
+  await List.deleteMany({
+    _id: { $in: listIDs },
+  });
   const result = await Event.deleteOne({ _id: id });
   return result.deletedCount;
 };

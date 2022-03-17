@@ -1,33 +1,42 @@
 const List = require('../models/List');
+const Event = require('../models/Event');
 
 // Find List
 exports.findListById = async (id) => {
-  const query = List.findById(id).populate('listItems');
-  return query.exec();
+  const event = await Event.findOne({ _id: id });
+  const listIDs = event.list;
+  const list = await List.find({
+    _id: { $in: listIDs },
+  });
+  return list;
 };
 
 // Add list item
-exports.addListItemById = async (id, listItem) => {
-  const query = List.findById(id);
-  query.listItems.push(listItem);
-  const updatedlist = await query.save();
-  return updatedList;
+exports.addListItem = async (eventId, listItem) => {
+  console.log(listItem);
+  const item = List.create(listItem);
+  const event = await Event.findOne({ _id: eventId });
+  event.list.push(item._id);
+  event.save();
+  console.log(item);
+  return item;
 };
 
 // Update list item
-exports.updatedListItemById = async (id, itemId, update, done) => {
-  const query = List.findById(id);
-  const listItem = query.listItems.id(itemId);
-  listItem.todo = update;
-  listItem.done = done;
-  const updatedList = await query.save();
-  return updatedList
-}
+exports.updateListItem = async (itemId, update) => {
+  const result = await List.updateOne({ _id: itemId }, update, {
+    omitUndefined: true,
+  });
+
+  if (result.modifiedCount === 0) {
+    throw 'Not Found';
+  } else {
+    return result.modifiedCount;
+  }
+};
 
 // Delete list item
-exports.deleteListItemById = async (id, listItemId) => {
-  const query = await List.findById(id);
-  query.listItems.id(listItemId).remove();
-  const updatedList = await query.save();
-  return updatedList;
+exports.deleteItemById = async (itemId) => {
+  const result = await List.deleteOne({ _id: itemId });
+  return result.deletedCount;
 };

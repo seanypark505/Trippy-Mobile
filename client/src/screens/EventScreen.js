@@ -5,7 +5,7 @@ import { HOST_8080 } from '../../environment';
 
 const EventScreen = ({ route, navigation }) => {
   const item = route.params.item;
-  
+  console.log(item);
 
   const shareLink = async (id) => {
     const source = {
@@ -52,7 +52,7 @@ const EventScreen = ({ route, navigation }) => {
       </View>
       <View style={styles.container}>
         <Text style={{ alignSelf: 'center' }} h2>
-          {item.name}
+          {item.title}
         </Text>
         <View style={styles.locationContainer}>
           <Icon
@@ -96,7 +96,7 @@ const EventScreen = ({ route, navigation }) => {
               type='font-awesome-5'
               name='list'
               solid={true}
-              onPress={() => navigation.push('List', { item })}
+              onPress={() => navigation.push('List', { event: item })}
             />
             <Text style={styles.iconLabel}>List</Text>
           </View>
