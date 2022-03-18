@@ -1,5 +1,6 @@
 const Event = require('../models/Event');
 const List = require('../models/List');
+const Post = require('../models/Post');
 
 // Create a new event
 exports.addEvent = async (title, location, date) => {
@@ -12,10 +13,12 @@ exports.addEvent = async (title, location, date) => {
   // Create new event
   const newEvent = await Event.create(eventInfo);
 
+  // Update the url to the event used for sharing
   const eventId = newEvent._id;
   const newUrl = `http://localhost:3000/events/share/${eventId}`;
   newEvent.url = newUrl;
 
+  // Create default list of toDo items
   const defaultList = [
     { item: 'This is a To Do List', done: false, event: eventId },
     { item: 'You can mark items complete', done: true, event: eventId },
@@ -33,6 +36,7 @@ exports.addEvent = async (title, location, date) => {
 
   const newList = await List.create(defaultList);
 
+  // Add toDo items as subdocuments to the event
   newList.forEach((item) => newEvent.list.push(item._id));
   return newEvent.save();
 };
@@ -45,35 +49,42 @@ exports.findEvents = async (filter, projection, limit) => {
 
 // Find event by Id
 exports.findEventById = async (id) => {
-  const query = await Event.findById(id).populate('list').populate('posts');
-  return query.exec();
+  const query = await Event.findOne({ _id: id })
+    .populate('list')
+    .populate('posts');
+  return query;
 };
 
 // Update event by Id
-exports.updateEventById = async (id, title, location, date) => {
-  const result = await Event.updateOne(
-    { _id: id },
-    {
-      title: title,
-      location: location,
-      date: date,
-    },
-    { omitUndefined: true }
-  );
+exports.updateEventById = async (id, update) => {
+  const result = await Event.updateOne({ _id: id }, update, {
+    omitUndefined: true,
+  });
 
-  if (result.n === 0) {
+  if (result.modifiedCount === 0) {
     throw 'Event does not exist';
   } else {
-    return result.nModified;
+    return result.modifiedCount;
   }
 };
 
+
+// Delete event by Id
 exports.deleteEventById = async (id) => {
   const event = await Event.findOne({ _id: id });
   const listIDs = event.list;
+  const postIDs = event.posts;
+
+  // Delete all associated toDo items for the event
   await List.deleteMany({
     _id: { $in: listIDs },
   });
+
+  // Delete all associated posts for the event
+  await Post.deleteMany({
+    _id: { $in: postIDs },
+  });
+
   const result = await Event.deleteOne({ _id: id });
   return result.deletedCount;
 };

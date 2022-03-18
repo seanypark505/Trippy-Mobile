@@ -6,9 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Trippy Event Page</title>
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
   </head>
   <body>
     <h1>Event Page</h1>
+    <h3>Event Name: <%= event.title %></h3>
+    <h3>Location: <%= event.location %></h3>
+    <h3>Date: <%= event.date %></h3>
+    <h2>Additional Info</h2>
+    <ul>
+      <% event.posts.forEach(post => { %>
+      <li>
+        <h3><%= post.content %></h3>
+      </li>
+      <% }); %>
+    </ul>
+    <h2>Event List</h2>
+    <ul>
+      <% event.list.forEach(todo => { %> <% if (todo.done) { %>
+      <li>
+        <h3><s><%= todo.item %></s></h3>
+      </li>
+      <% } else { %>
+      <li>
+        <h3><%= todo.item %></h3>
+      </li>
+      <% } %> <% }); %>
+    </ul>
   </body>
 </html>

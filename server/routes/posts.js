@@ -1,4 +1,4 @@
-const lists = require('../controllers/ListController');
+const posts = require('../controllers/PostController');
 const express = require('express');
 const router = express.Router();
 
@@ -7,10 +7,10 @@ router.post('/:id', (req, res) => {
   const { id } = req.params;
   const newItem = req.body;
 
-  lists
-    .addListItem(id, newItem)
-    .then((list) => {
-      res.status(201).json(list);
+  posts
+    .addPostItem(id, newItem)
+    .then((post) => {
+      res.status(201).json(post);
     })
     .catch((error) => {
       console.error(error);
@@ -22,11 +22,11 @@ router.post('/:id', (req, res) => {
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
-  lists
-    .findListById(id)
-    .then((list) => {
-      if (list !== null) {
-        res.status(200).json(list);
+  posts
+    .findPostById(id)
+    .then((posts) => {
+      if (posts !== null) {
+        res.status(200).json(posts);
       } else {
         res.status(500).json({ Error: 'Resource Not Found' });
       }
@@ -42,7 +42,7 @@ router.put('/update/:id', (req, res) => {
   const { id } = req.params;
   const update = req.body;
 
-  lists.updateListItem(id, update).then((numUpdated) => {
+  posts.updatePostItem(id, update).then((numUpdated) => {
     if (numUpdated === 1) {
       res.status(200).json({
         _id: req.params.id,
@@ -59,7 +59,7 @@ router.put('/update/:id', (req, res) => {
 router.delete('/:itemId', (req, res) => {
   const { itemId } = req.params;
 
-  lists.deleteItemById(itemId).then((deletedCount) => {
+  posts.deletePostById(itemId).then((deletedCount) => {
     if (deletedCount === 1) {
       res.status(204).send();
     } else {

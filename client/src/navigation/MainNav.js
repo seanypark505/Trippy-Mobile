@@ -9,6 +9,7 @@ const Tab = createBottomTabNavigator();
 
 const MainNav = ({ route, navigation }) => {
   return (
+    // Bottom Tab Navigator menu for Home and Create Event
     <SafeAreaProvider>
       <Tab.Navigator>
         <Tab.Screen

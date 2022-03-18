@@ -9,6 +9,7 @@ const ListScreen = ({ route, navigation }) => {
   const [newItem, setNewItem] = useState('');
   const event = route.params.event;
 
+  // Retrieve all list items for the event
   const loadList = async () => {
     const res = await fetch(`${HOST_3000}/lists/${event._id}`, {
       method: 'GET',
@@ -21,6 +22,7 @@ const ListScreen = ({ route, navigation }) => {
     setList(data);
   };
 
+  // Delete list item
   const onDelete = async (_id) => {
     const res = await fetch(`${HOST_3000}/lists/${_id}`, { method: 'DELETE' });
 
@@ -33,6 +35,7 @@ const ListScreen = ({ route, navigation }) => {
     }
   };
 
+  // Create new list item
   const handleSubmit = async () => {
     const data = {
       item: newItem,
@@ -50,11 +53,13 @@ const ListScreen = ({ route, navigation }) => {
     if (res.status === 201) {
       const newListItem = await res.json();
       setList([...list, newListItem]);
+      setNewItem('');
     } else {
       console.log(`Status Code ${res.status} - Failed to create new item`);
     }
   };
 
+  // Render ToDoItem component
   const listItem = ({ item }) => {
     return <TodoItem listData={item} onDelete={onDelete} />;
   };

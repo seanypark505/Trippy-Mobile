@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MainNav from './src/navigation/MainNav';
 import EventScreen from './src/screens/EventScreen';
+import EditEventScreen from './src/screens/EditEventScreen';
 import ListScreen from './src/screens/ListScreen';
 import { StatusBar } from 'react-native';
 
@@ -26,6 +27,11 @@ export default function App() {
           <Stack.Screen
             name='Event'
             component={EventScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='Edit'
+            component={EditEventScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

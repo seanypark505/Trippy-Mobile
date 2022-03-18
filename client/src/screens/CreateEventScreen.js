@@ -16,6 +16,7 @@ const CreateEventScreen = ({ route, navigation }) => {
   const [date, setDate] = useState(new Date());
   const [isPickerShow, setIsPickerShow] = useState(false);
 
+  // Updates date state
   const onDateChange = (event, value) => {
     setDate(value);
     if (Platform.OS === 'android') {
@@ -23,10 +24,12 @@ const CreateEventScreen = ({ route, navigation }) => {
     }
   };
 
+  // Show date picker based on isPickerShow state
   const showPicker = () => {
     isPickerShow ? setIsPickerShow(false) : setIsPickerShow(true);
   };
 
+  // Handle Submit button and create a new event
   const handleSubmit = async () => {
     const eventData = {
       title: title,
@@ -43,6 +46,7 @@ const CreateEventScreen = ({ route, navigation }) => {
     });
 
     if (res.status === 201) {
+      // Event successfuly created, go back home to see created event in list
       console.log('Event created');
       const event = await res.json();
       navigation.navigate('Home', { post: event });

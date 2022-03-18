@@ -7,6 +7,7 @@ import { HOST_3000 } from '../../environment';
 const HomeScreen = ({ navigation, route }) => {
   const [events, setEvents] = useState([]);
 
+  // Load all the events that have been created
   const loadEvents = async () => {
     const res = await fetch(`${HOST_3000}/events`, {
       method: 'GET',
@@ -18,6 +19,7 @@ const HomeScreen = ({ navigation, route }) => {
     setEvents(data);
   };
 
+  // Alert the user they are about to delete an event and its contents
   const alertDelete = (_id) => {
     Alert.alert(
       'Deleting Event',
@@ -35,6 +37,7 @@ const HomeScreen = ({ navigation, route }) => {
     );
   };
 
+  // If user confirms alertDelete, delete event
   const onDelete = async (_id) => {
     const res = await fetch(`${HOST_3000}/events/${_id}`, { method: 'DELETE' });
     if (res.status === 204) {
@@ -46,10 +49,12 @@ const HomeScreen = ({ navigation, route }) => {
     }
   };
 
+  // Navigate to the event page
   const viewEvent = (item) => {
     navigation.navigate('Event', { item });
   };
 
+  // Render EventCard component
   const eventCard = ({ item }) => {
     return (
       <EventCard

@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const corsOptions = { origin: 'http://localhost:3000' };
 
-// Database
+// Configure Database
 mongoose
   .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -22,7 +22,7 @@ db.once('open', function () {
   console.log('Connected to trippyDB');
 });
 
-// Configurations
+// Configure EJS template engine and other configs
 app.set('view engine', 'ejs');
 app.use(cors(corsOptions));
 app.use(
@@ -33,28 +33,13 @@ app.use(
 app.use(express.json());
 app.use(express.static('public'));
 
-// Set up session
-// app.use(
-//   require('express-session')({
-//     secret: 'keyboard cat',
-//     resave: false,
-//     saveUninitialized: true,
-//   })
-// );
-
-// Passport config
-// app.use(passport.initialize());
-// app.use(passport.session());
-// passport.use(User.createStrategy());
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
 // Routes
 const events = require('./routes/events');
 const lists = require('./routes/lists');
-
+const posts = require('./routes/posts');
 app.use('/events', events);
 app.use('/lists', lists);
+app.use('/posts', posts);
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on port ${PORT}`);

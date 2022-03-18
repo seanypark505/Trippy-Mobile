@@ -1,12 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import { Share, View, StyleSheet, SafeAreaView, Button } from 'react-native';
+import {
+  Share,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  Button,
+  FlatList,
+} from 'react-native';
 import { Text, Icon, Input } from 'react-native-elements';
-import { HOST_8080 } from '../../environment';
+import PostItem from '../components/PostItem';
+import { HOST_8080, HOST_3000 } from '../../environment';
 
 const EventScreen = ({ route, navigation }) => {
+  const [posts, setPosts] = useState([]);
+  const [newPost, setNewPost] = useState([]);
   const item = route.params.item;
-  console.log(item);
 
+  // Get all posts for the event and update posts state variable
+  const loadPosts = async () => {
+    const res = await fetch(`${HOST_3000}/posts/${item._id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const data = await res.json();
+    setPosts(data);
+  };
+
+  // Send link to the event, this will call URLShortener Microservice
   const shareLink = async (id) => {
     const source = {
       url: `http://localhost:3000/events/share/${id}`,
@@ -45,6 +68,53 @@ const EventScreen = ({ route, navigation }) => {
     }
   };
 
+  // Create a new post for the event
+  const handleSubmit = async () => {
+    const data = {
+      content: newPost,
+    };
+
+    const res = await fetch(`${HOST_3000}/posts/${item._id}`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.status === 201) {
+      const newPostItem = await res.json();
+      setPosts([...posts, newPostItem]);
+    } else {
+      console.log(`Status Code ${res.status} - Failed to create new post`);
+    }
+  };
+
+  // Delete a post for the event
+  const onDelete = async (_id) => {
+    const res = await fetch(`${HOST_3000}/posts/${_id}`, { method: 'DELETE' });
+    if (res.status === 204) {
+      setPosts(posts.filter((item) => item._id !== _id));
+    } else {
+      console.error(
+        `Status Code: ${res.status} - Failed to delete post with ${_id}.`
+      );
+    }
+  };
+
+  // Render PostItem component
+  const postItem = ({ item }) => {
+    return <PostItem postData={item} onDelete={onDelete} />;
+  };
+
+  useEffect(() => {
+    if (route.params?.item) {
+      loadPosts();
+    } else {
+      loadPosts();
+    }
+  }, [route.params?.item]);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.topMenu}>
@@ -78,7 +148,7 @@ const EventScreen = ({ route, navigation }) => {
               type='font-awesome-5'
               name='edit'
               solid={true}
-              onPress={() => console.log('This will go to the edit screen')}
+              onPress={() => navigation.navigate('Edit', { event: item })}
             />
             <Text style={styles.iconLabel}>Edit</Text>
           </View>
@@ -87,7 +157,7 @@ const EventScreen = ({ route, navigation }) => {
               type='font-awesome-5'
               name='share-square'
               solid={true}
-              onPress={() => shareLink(item.id)}
+              onPress={() => shareLink(item._id)}
             />
             <Text style={styles.iconLabel}>Share</Text>
           </View>
@@ -103,12 +173,25 @@ const EventScreen = ({ route, navigation }) => {
         </View>
       </View>
       <View>
-        <Text style={{ marginLeft: 30, fontSize: 20, padding: 10 }}>Posts</Text>
+        <Text style={{ marginLeft: 30, fontSize: 20, padding: 10 }}>
+          Additional Info
+        </Text>
       </View>
+      <FlatList
+        data={posts}
+        keyExtractor={(item) => item._id}
+        renderItem={postItem}
+      />
       <View style={styles.inputBox}>
         <Input
+          onChangeText={(newPost) => setNewPost(newPost)}
           placeholder='Write a message ...'
-          rightIcon={{ type: 'ionicon', name: 'send', color: '#00B4D8' }}
+          rightIcon={{
+            type: 'ionicon',
+            name: 'send',
+            color: '#00B4D8',
+            onPress: handleSubmit,
+          }}
         />
       </View>
     </SafeAreaView>
